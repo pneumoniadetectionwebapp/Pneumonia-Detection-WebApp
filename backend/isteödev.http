@@ -1,0 +1,6 @@
+@isteödev_HostAddress = http://localhost:5010
+
+GET {{isteödev_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
