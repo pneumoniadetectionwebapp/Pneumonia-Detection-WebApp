@@ -1,0 +1,124 @@
+/* GLOBAL FONT VARIABLES */
+:root {
+  --font-main: 'Inter', sans-serif;
+  --font-title: 'Poppins', sans-serif;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: var(--font-main);
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  min-height: 100vh;
+}
+
+/* MAIN CONTAINER */
+.container {
+  width: 100%;
+  padding: 8px 40px; /* navbar daha sıkı */
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px; /* daha ferah */
+}
+
+.logo-area h2 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: #0d47a1;
+  font-size: 48px; /* büyütüldü */
+  letter-spacing: -0.8px;
+  margin: 0;
+  padding: 0;
+}
+
+/* BUTTONS */
+.login-btn,
+.primary-btn {
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+  font-weight: 500;
+}
+
+.login-btn {
+  padding: 10px 24px;
+  background: #2196f3;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.login-btn:hover {
+  background: #1e88e5;
+}
+
+/* MAIN CONTENT SECTION */
+.content {
+  display: flex;
+  margin-top: 5px; /* Başlık yukarı çekildi */
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* LEFT TEXT SIDE */
+.text-side {
+  max-width: 45%;
+}
+
+.text-side h1 {
+  font-family: var(--font-title);
+  font-size: 54px; /* daha büyük başlık */
+  font-weight: 700;
+  color: #0d47a1;
+  margin-top: 0;    
+  margin-bottom: 12px; 
+  letter-spacing: -0.6px;
+}
+
+.text-side p {
+  font-size: 18px;
+  color: #0d47a1;
+  margin-bottom: 20px;
+  line-height: 1.55;
+}
+
+/* Primary Button */
+.primary-btn {
+  padding: 14px 32px;
+  background: #0d47a1;
+  color: white;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
+.primary-btn:hover {
+  background: #082f6b;
+}
+
+/* RIGHT SIDE IMAGE */
+.image-side {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* üstten hizalandı */
+}
+
+.image-box {
+  width: 430px;
+  height: 540px;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0px 15px 35px rgba(0,0,0,0.18);
+}
