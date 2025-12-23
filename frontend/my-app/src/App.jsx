@@ -1,6 +1,16 @@
+import { useState } from "react";
 import "./App.css";
+import LoginScreen from "./LoginScreen";
+import PhotoUploadScreen from "./PhotoUploadScreen";
 
 export default function App() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
+
+  if (showUpload) {
+    return <PhotoUploadScreen />;
+  }
+
   return (
     <div className="container">
 
@@ -9,10 +19,16 @@ export default function App() {
         <div className="logo-area">
           <h2>Dijital Radyolog</h2>
         </div>
-        <button className="login-btn">Giriş Yap</button>
+
+        <button
+          className="login-btn"
+          onClick={() => setShowLogin(true)}
+        >
+          Giriş Yap
+        </button>
       </nav>
 
-      {/* MAIN CONTENT */}
+      {/* LANDING */}
       <main className="content">
         <div className="text-side">
           <h1>Görüntü Analizinde Yeni Nesil Deneyim</h1>
@@ -22,7 +38,13 @@ export default function App() {
             çok daha hızlı, güvenilir ve erişilebilir.
           </p>
 
-          <button className="primary-btn">Hemen Başla</button>
+       
+          <div
+            className="start-text"
+            onClick={() => setShowLogin(true)}
+          >
+            Hemen Başla
+          </div>
         </div>
 
         <div className="image-side">
@@ -33,6 +55,17 @@ export default function App() {
           />
         </div>
       </main>
+
+      {/* LOGIN */}
+      {showLogin && (
+        <LoginScreen
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={() => {
+            setShowLogin(false);
+            setShowUpload(true);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -21,7 +21,7 @@ body {
 /* MAIN CONTAINER */
 .container {
   width: 100%;
-  padding: 8px 40px; /* navbar daha sıkı */
+  padding: 8px 40px;
 }
 
 /* NAVBAR */
@@ -29,44 +29,38 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px; /* daha ferah */
+  height: 80px;
 }
 
 .logo-area h2 {
   font-family: var(--font-title);
   font-weight: 700;
   color: #0d47a1;
-  font-size: 48px; /* büyütüldü */
+  font-size: 48px;
   letter-spacing: -0.8px;
-  margin: 0;
-  padding: 0;
 }
 
-/* BUTTONS */
-.login-btn,
-.primary-btn {
-  border: none;
-  cursor: pointer;
-  transition: 0.25s;
-  font-weight: 500;
-}
-
+/* LOGIN BUTTON */
 .login-btn {
   padding: 10px 24px;
-  background: #2196f3;
+  background-color: #2196f3;
   color: white;
+  border: none;
   border-radius: 8px;
   font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
 }
 
 .login-btn:hover {
-  background: #1e88e5;
+  background-color: #1e88e5;
 }
 
-/* MAIN CONTENT SECTION */
+/* MAIN CONTENT */
 .content {
   display: flex;
-  margin-top: 5px; /* Başlık yukarı çekildi */
+  margin-top: 10px;
   align-items: center;
   justify-content: space-between;
   gap: 40px;
@@ -79,40 +73,43 @@ body {
 
 .text-side h1 {
   font-family: var(--font-title);
-  font-size: 54px; /* daha büyük başlık */
+  font-size: 54px;
   font-weight: 700;
   color: #0d47a1;
-  margin-top: 0;    
-  margin-bottom: 12px; 
+  margin-bottom: 14px;
   letter-spacing: -0.6px;
 }
 
 .text-side p {
   font-size: 18px;
   color: #0d47a1;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   line-height: 1.55;
 }
 
-/* Primary Button */
-.primary-btn {
-  padding: 14px 32px;
-  background: #0d47a1;
-  color: white;
-  border-radius: 10px;
-  font-size: 18px;
+
+.start-text {
+  margin-top: 22px;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #0d47a1;
+  cursor: pointer;
+  letter-spacing: -0.2px;
+  transition: color 0.2s ease, transform 0.15s ease;
 }
 
-.primary-btn:hover {
-  background: #082f6b;
+.start-text:hover {
+  color: #082f6b;
+  transform: translateX(4px);
 }
 
-/* RIGHT SIDE IMAGE */
+/* RIGHT IMAGE SIDE */
 .image-side {
   width: 45%;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* üstten hizalandı */
+  align-items: flex-start;
 }
 
 .image-box {
