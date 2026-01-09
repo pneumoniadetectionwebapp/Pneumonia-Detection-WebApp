@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./PhotoUploadScreen.css";
 
-export default function PhotoUploadScreen() {
+export default function PhotoUploadScreen({ onShowHistory }) {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
@@ -64,12 +64,21 @@ export default function PhotoUploadScreen() {
             />
           </label>
 
+          {/* ANALİZ BUTONU */}
           <button
             className="analyze-btn"
             disabled={!preview || loading}
             onClick={handleAnalyze}
           >
             Analizi Başlat
+          </button>
+
+          {/* 👇 GEÇMİŞ ANALİZLER – TAM OLARAK BURADA */}
+          <button
+            className="history-btn"
+            onClick={onShowHistory}
+          >
+            Geçmiş Analizler
           </button>
         </section>
 
@@ -92,7 +101,6 @@ export default function PhotoUploadScreen() {
 
             {result && (
               <div className="report-card">
-
                 <div className="report-header">
                   <h2>Analiz Raporu</h2>
                   <span>PNG Görüntü</span>
@@ -122,7 +130,6 @@ export default function PhotoUploadScreen() {
                     yalnızca bilgilendirme amaçlıdır.
                   </p>
                 </div>
-
               </div>
             )}
 

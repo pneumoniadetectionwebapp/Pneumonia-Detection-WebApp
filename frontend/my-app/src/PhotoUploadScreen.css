@@ -2,9 +2,8 @@
   box-sizing: border-box;
 }
 
-/* 🔥 TEK ORTAK BACKGROUND RENGİ */
 :root {
-  --card-bg: #fdfefe; /* kırık beyaz */
+  --card-bg: #fdfefe;
 }
 
 /* SAYFA */
@@ -24,11 +23,12 @@
 /* SOL PANEL */
 .left-panel {
   width: 45%;
-  padding: 90px 70px;
+  padding: 60px 70px;  
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; 
 }
+
 
 /* SAĞ PANEL */
 .right-panel {
@@ -44,7 +44,7 @@
 
 /* BAŞLIK */
 .upload-title {
-  font-size: 44px;
+  font-size: 56px;
   font-weight: 800;
   color: #0d47a1;
   margin-bottom: 14px;
@@ -56,10 +56,10 @@
   line-height: 1.6;
 }
 
-/* ===== UPLOAD BOX ===== */
+/* UPLOAD BOX */
 .upload-box {
   height: 320px;
-  background: var(--card-bg);   /* 🔥 AYNI */
+  background: var(--card-bg);
   border-radius: 22px;
   border: 2px dashed #0d47a1;
   display: flex;
@@ -76,7 +76,6 @@
   align-items: center;
   gap: 6px;
   color: #0d47a1;
-  text-align: center;
 }
 
 .upload-placeholder.hidden {
@@ -91,7 +90,6 @@
 .format-text {
   font-size: 12px;
   opacity: 0.75;
-  letter-spacing: 0.6px;
   text-transform: uppercase;
 }
 
@@ -115,9 +113,10 @@
   border-radius: 22px;
 }
 
-/* BUTTON */
+/* ANALYZE BUTTON */
 .analyze-btn {
   margin-top: 30px;
+  margin-bottom: 16px;
   padding: 16px;
   background: #0d47a1;
   color: white;
@@ -132,18 +131,34 @@
   cursor: not-allowed;
 }
 
+/* HISTORY BUTTON */
+.history-btn {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.history-btn:hover {
+  background-color: #1d4ed8;
+}
+
 /* EMPTY */
 .report-empty {
   padding-top: 10px;
   color: #0d47a1;
 }
 
-/* ===== RAPOR CARD ===== */
+/* RAPOR CARD */
 .report-card {
   margin-top: 10px;
   padding: 28px 32px;
   border-radius: 20px;
-  background: var(--card-bg);   /* 🔥 AYNI */
+  background: var(--card-bg);
   box-shadow: 0 10px 28px rgba(13, 71, 161, 0.12);
   display: flex;
   flex-direction: column;
@@ -153,7 +168,7 @@
 /* HEADER */
 .report-header {
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(13,71,161,0.15);
+  border-bottom: 1px solid rgba(13, 71, 161, 0.15);
 }
 
 .report-header h2 {

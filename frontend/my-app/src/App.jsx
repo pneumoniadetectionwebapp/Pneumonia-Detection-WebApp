@@ -2,15 +2,34 @@ import { useState } from "react";
 import "./App.css";
 import LoginScreen from "./LoginScreen";
 import PhotoUploadScreen from "./PhotoUploadScreen";
+import AnalysisHistory from "./AnalysisHistory";
+
+
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
-  if (showUpload) {
-    return <PhotoUploadScreen />;
+  // 📌 ANALYSIS HISTORY EKRANI
+  if (showHistory) {
+    return (
+      <AnalysisHistory
+        onBack={() => setShowHistory(false)}
+      />
+    );
   }
 
+  // 📌 FOTO YÜKLEME / ANALİZ EKRANI
+  if (showUpload) {
+    return (
+      <PhotoUploadScreen
+        onShowHistory={() => setShowHistory(true)}
+      />
+    );
+  }
+
+  // 📌 LANDING PAGE
   return (
     <div className="container">
 
@@ -38,7 +57,6 @@ export default function App() {
             çok daha hızlı, güvenilir ve erişilebilir.
           </p>
 
-       
           <div
             className="start-text"
             onClick={() => setShowLogin(true)}
