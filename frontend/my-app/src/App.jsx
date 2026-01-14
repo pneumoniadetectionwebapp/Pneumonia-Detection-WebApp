@@ -1,20 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import LoginScreen from "./LoginScreen";
 import PhotoUploadScreen from "./PhotoUploadScreen";
+import AnalysisHistory from "./AnalysisHistory";
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
+  const [screen, setScreen] = useState("landing");
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
 
-  if (showUpload) {
-    return <PhotoUploadScreen />;
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setHasToken(true);
+      setScreen("upload");
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setHasToken(false);
+    setScreen("landing");
+  };
+
+  
+  if (screen === "upload") {
+    return (
+      <PhotoUploadScreen
+        onGoHistory={() => setScreen("history")}
+        onLogout={handleLogout}
+      />
+    );
   }
+
+  
+  if (screen === "history") {
+    return <AnalysisHistory onBack={() => setScreen("upload")} />;
+  }
+
 
   return (
     <div className="container">
-
-      {/* NAVBAR */}
+      
       <nav className="navbar">
         <div className="logo-area">
           <h2>Dijital Radyolog</h2>
@@ -22,29 +50,23 @@ export default function App() {
 
         <button
           className="login-btn"
-          onClick={() => setShowLogin(true)}
+          onClick={() => (hasToken ? setScreen("upload") : setShowLogin(true))}
         >
-          Giriş Yap
+          {hasToken ? "Devam Et" : "Giriş Yap"}
         </button>
       </nav>
 
-      {/* LANDING */}
+      
       <main className="content">
         <div className="text-side">
           <h1>Görüntü Analizinde Yeni Nesil Deneyim</h1>
 
           <p>
-            Yapay zeka destekli platformumuz ile görüntü analizi süreçleri
-            çok daha hızlı, güvenilir ve erişilebilir.
+            Yapay zeka destekli platformumuz ile görüntü analizi süreçleri çok daha hızlı,
+            güvenilir ve erişilebilir.
           </p>
 
-       
-          <div
-            className="start-text"
-            onClick={() => setShowLogin(true)}
-          >
-            Hemen Başla
-          </div>
+          
         </div>
 
         <div className="image-side">
@@ -62,7 +84,8 @@ export default function App() {
           onClose={() => setShowLogin(false)}
           onLoginSuccess={() => {
             setShowLogin(false);
-            setShowUpload(true);
+            setHasToken(true);
+            setScreen("upload");
           }}
         />
       )}

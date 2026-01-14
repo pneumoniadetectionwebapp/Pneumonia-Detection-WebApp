@@ -1,43 +1,63 @@
 import { useState } from "react";
 import "./PhotoUploadScreen.css";
+import { authFetch } from "./api";
 
-export default function PhotoUploadScreen() {
+export default function PhotoUploadScreen({ onGoHistory, onLogout }) {
   const [preview, setPreview] = useState(null);
+  const [fileObj, setFileObj] = useState(null);
+
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
 
   const handleFile = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    setLoading(true);
-    setResult(false);
+    setError("");
+    setResult(null);
 
-    setTimeout(() => {
-      setPreview(URL.createObjectURL(file));
-      setLoading(false);
-    }, 800);
+    setFileObj(file);
+    setPreview(URL.createObjectURL(file));
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
+    if (!fileObj) return;
+
     setLoading(true);
-    setTimeout(() => {
-      setResult(true);
+    setError("");
+    setResult(null);
+
+    try {
+      
+      const form = new FormData();
+      form.append("File", fileObj);
+
+      
+      const res = await authFetch("/api/Prediction/predict", {
+        method: "POST",
+        body: form,
+        
+      });
+
+      const data = await res.json();
+      setResult(data);
+    } catch (e) {
+      setError(e.message || "Analiz başarısız");
+    } finally {
       setLoading(false);
-    }, 1200);
+    }
   };
 
   return (
     <div className="upload-page">
       <div className="layout">
-
         {/* SOL PANEL */}
         <section className="left-panel">
           <h1 className="upload-title">Dijital Radyolog</h1>
 
           <p className="upload-desc">
-            Yapay zeka destekli sistem ile akciğer görüntülerini
-            güvenli ve hızlı şekilde analiz edin.
+            Yapay zeka destekli sistem ile akciğer görüntülerini güvenli ve hızlı şekilde analiz edin.
           </p>
 
           <label className="upload-box">
@@ -45,7 +65,7 @@ export default function PhotoUploadScreen() {
 
             <div className={`upload-placeholder ${preview ? "hidden" : ""}`}>
               <span className="upload-text">Görüntü Yükle</span>
-              <small className="format-text">PNG</small>
+              <small className="format-text">PNG / JPG</small>
             </div>
 
             {preview && (
@@ -59,7 +79,7 @@ export default function PhotoUploadScreen() {
             <input
               type="file"
               hidden
-              accept="image/png"
+              accept="image/png,image/jpeg"
               onChange={handleFile}
             />
           </label>
@@ -69,14 +89,42 @@ export default function PhotoUploadScreen() {
             disabled={!preview || loading}
             onClick={handleAnalyze}
           >
-            Analizi Başlat
+            {loading ? "Analiz ediliyor..." : "Analizi Başlat"}
           </button>
+
+          {/* NAV BUTONLARI */}
+          <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <button
+              className="analyze-btn"
+              style={{ padding: "10px 14px" }}
+              onClick={onGoHistory}
+              disabled={loading}
+              type="button"
+            >
+              Analiz Geçmişi
+            </button>
+
+            <button
+              className="analyze-btn"
+              style={{ padding: "10px 14px" }}
+              onClick={onLogout}
+              disabled={loading}
+              type="button"
+            >
+              Çıkış
+            </button>
+          </div>
+
+          {error ? (
+            <div style={{ marginTop: 10, color: "#b00020", fontSize: 14 }}>
+              {error}
+            </div>
+          ) : null}
         </section>
 
         {/* SAĞ PANEL */}
         <section className="right-panel">
           <div className="right-content">
-
             {!result && !loading && (
               <div className="report-empty">
                 <h2>Analiz Sonucu</h2>
@@ -92,43 +140,29 @@ export default function PhotoUploadScreen() {
 
             {result && (
               <div className="report-card">
-
                 <div className="report-header">
                   <h2>Analiz Raporu</h2>
-                  <span>PNG Görüntü</span>
+                  <span>{fileObj?.type?.includes("jpeg") ? "JPG" : "PNG"} Görüntü</span>
                 </div>
 
                 <div className="report-section">
-                  <h3>Özet</h3>
-                  <p>
-                    Yüklenen akciğer görüntüsü yapay zeka destekli sistem
-                    tarafından değerlendirilmiştir.
-                  </p>
-                </div>
-
-                <div className="report-section">
-                  <h3>İnceleme Detayları</h3>
+                  <h3>Model Çıktısı</h3>
                   <ul>
-                    <li>Görüntü kontrast seviyesi analiz edildi</li>
-                    <li>Genel doku yapısı değerlendirildi</li>
-                    <li>Çözünürlük ve netlik kontrol edildi</li>
+                    <li><b>Label:</b> {result?.label ?? "-"}</li>
+                    <li><b>Confidence:</b> {result?.confidence ?? "-"}</li>
                   </ul>
                 </div>
 
                 <div className="report-section">
                   <h3>Bilgilendirme</h3>
                   <p>
-                    Bu rapor otomatik sistem tarafından üretilmiştir ve
-                    yalnızca bilgilendirme amaçlıdır.
+                    Bu rapor otomatik sistem tarafından üretilmiştir ve yalnızca bilgilendirme amaçlıdır.
                   </p>
                 </div>
-
               </div>
             )}
-
           </div>
         </section>
-
       </div>
     </div>
   );

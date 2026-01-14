@@ -1,57 +1,65 @@
-﻿using isteodev.DTOs;
+﻿using isteodev.Data;
+using isteodev.DTOs;
+using isteodev.Models;
 using isteodev.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
-namespace isteodev.Controllers
+namespace isteodev.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly AppDbContext _db;
+    private readonly JwtService _jwt;
+
+    public AuthController(AppDbContext db, JwtService jwt)
     {
-        private readonly JwtService _jwtService;
-        private readonly InMemoryUserService _userService;
+        _db = db;
+        _jwt = jwt;
+    }
 
-        
-        public AuthController(InMemoryUserService userService, JwtService jwtService)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterDto dto)
+    {
+        if (await _db.Users.AnyAsync(x => x.Email == dto.Email))
+            return BadRequest("Bu email zaten kayıtlı.");
+
+        var user = new User
         {
-            _userService = userService;
-            _jwtService = jwtService;
-        }
+            Name = dto.Name,
+            Email = dto.Email,
+            PasswordHash = Hash(dto.Password)
+        };
 
-        [HttpPost("register")]
-        public IActionResult Register(RegisterDto dto)
-        {
-            try
-            {
-                var user = _userService.Register(dto.Name, dto.Email, dto.Password);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
 
-        [HttpPost("login")]
-        public IActionResult Login(LoginDto dto)
-        {
-            var user = _userService.Login(dto.Email, dto.Password);
+        return Ok();
+    }
 
-            if (user == null)
-                return Unauthorized("Email veya şifre hatalı.");
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDto dto)
+    {
+        var user = await _db.Users
+            .FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            var token = _jwtService.GenerateToken(user.Id, user.Email);
+        if (user == null || user.PasswordHash != Hash(dto.Password))
+            return Unauthorized("Email veya şifre hatalı");
 
-            return Ok(new
-            {
-                token = token,
-                user = new
-                {
-                    user.Id,
-                    user.Name,
-                    user.Email
-                }
-            });
-        }
+        var token = _jwt.GenerateToken(user.Id, user.Email);
+
+        return Ok(new { token });
+    }
+
+    private static string Hash(string input)
+    {
+        using var sha = SHA256.Create();
+        return Convert.ToHexString(
+            sha.ComputeHash(Encoding.UTF8.GetBytes(input))
+        );
     }
 }

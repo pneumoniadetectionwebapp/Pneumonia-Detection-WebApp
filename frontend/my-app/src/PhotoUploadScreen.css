@@ -2,26 +2,26 @@
   box-sizing: border-box;
 }
 
-/* 🔥 TEK ORTAK BACKGROUND RENGİ */
+
 :root {
-  --card-bg: #fdfefe; /* kırık beyaz */
+  --card-bg: #fdfefe; 
 }
 
-/* SAYFA */
+
 .upload-page {
   width: 100%;
   height: 100vh;
   background: linear-gradient(135deg, #e3f2fd, #bbdefb);
 }
 
-/* LAYOUT */
+
 .layout {
   display: flex;
   width: 100%;
   height: 100vh;
 }
 
-/* SOL PANEL */
+
 .left-panel {
   width: 45%;
   padding: 90px 70px;
@@ -30,7 +30,7 @@
   justify-content: center;
 }
 
-/* SAĞ PANEL */
+
 .right-panel {
   width: 55%;
   padding: 40px 60px;
@@ -42,7 +42,7 @@
   overflow-y: auto;
 }
 
-/* BAŞLIK */
+
 .upload-title {
   font-size: 44px;
   font-weight: 800;
@@ -56,10 +56,10 @@
   line-height: 1.6;
 }
 
-/* ===== UPLOAD BOX ===== */
+
 .upload-box {
   height: 320px;
-  background: var(--card-bg);   /* 🔥 AYNI */
+  background: var(--card-bg);   
   border-radius: 22px;
   border: 2px dashed #0d47a1;
   display: flex;
@@ -69,7 +69,7 @@
   cursor: pointer;
 }
 
-/* PLACEHOLDER */
+
 .upload-placeholder {
   display: flex;
   flex-direction: column;
@@ -95,7 +95,7 @@
   text-transform: uppercase;
 }
 
-/* PREVIEW */
+
 .preview-img {
   width: 100%;
   height: 100%;
@@ -103,7 +103,7 @@
   border-radius: 22px;
 }
 
-/* LOADING */
+
 .loading {
   position: absolute;
   inset: 0;
@@ -115,7 +115,7 @@
   border-radius: 22px;
 }
 
-/* BUTTON */
+
 .analyze-btn {
   margin-top: 30px;
   padding: 16px;
@@ -132,25 +132,25 @@
   cursor: not-allowed;
 }
 
-/* EMPTY */
+
 .report-empty {
   padding-top: 10px;
   color: #0d47a1;
 }
 
-/* ===== RAPOR CARD ===== */
+
 .report-card {
   margin-top: 10px;
   padding: 28px 32px;
   border-radius: 20px;
-  background: var(--card-bg);   /* 🔥 AYNI */
+  background: var(--card-bg);   
   box-shadow: 0 10px 28px rgba(13, 71, 161, 0.12);
   display: flex;
   flex-direction: column;
   gap: 26px;
 }
 
-/* HEADER */
+
 .report-header {
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(13,71,161,0.15);
@@ -167,7 +167,7 @@
   color: #607d8b;
 }
 
-/* SECTION */
+
 .report-section h3 {
   font-size: 16px;
   font-weight: 600;

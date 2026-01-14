@@ -1,5 +1,4 @@
-﻿
-using isteodev.Data;
+﻿using isteodev.Data;
 using isteodev.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -8,21 +7,36 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ SERVICES
+// ✅ ENV + Blob config debug (builder oluşturulduktan hemen sonra)
+Console.WriteLine("ENV=" + builder.Environment.EnvironmentName);
+Console.WriteLine("Blob:ContainerName=" + builder.Configuration["Blob:ContainerName"]);
+Console.WriteLine("Blob:ConnLen=" + (builder.Configuration["Blob:ConnectionString"]?.Trim().Length ?? -1));
+
+// (Senin mevcut debug bloğun da kalsın - daha detaylı)
+var blobConn = builder.Configuration["Blob:ConnectionString"];
+var blobContainer = builder.Configuration["Blob:ContainerName"];
+
+Console.WriteLine("=== CONFIG CHECK ===");
+Console.WriteLine($"Blob:ConnectionString NULL? {string.IsNullOrWhiteSpace(blobConn)}");
+Console.WriteLine($"Blob:ConnectionString Length: {(blobConn ?? "").Trim().Length}");
+Console.WriteLine($"Blob:ContainerName: '{(blobContainer ?? "").Trim()}'");
+Console.WriteLine("====================");
+
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IPredictionHistoryService, InMemoryPredictionHistoryService>();
+builder.Services.AddSingleton<BlobStorageService>();
+builder.Services.AddScoped<PredictionLogService>();
 
-builder.Services.AddSingleton<InMemoryUserService>();
+builder.Services.AddHttpClient<AiInferenceClient>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 
-// ✅ Jwt Service (ÇOK KRİTİK)
 builder.Services.AddSingleton<JwtService>();
 
-// ✅ DbContext (Şimdilik kullanmıyoruz ama kalabilir)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ JWT AUTHENTICATION (EN KRİTİK KISIM)
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -41,8 +55,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(jwt["Key"]!))
         };
     });
+    
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.EnableDetailedErrors();
+    options.EnableSensitiveDataLogging(); // sadece Development'ta kalsın
+});
 
-// ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -72,10 +92,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
 var app = builder.Build();
 
-// ✅ HTTP PIPELINE
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -84,9 +102,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ✅ BU SIRA ÇOK ÖNEMLİ
-app.UseAuthentication();   // 🔐 önce authentication
-app.UseAuthorization();    // 🔐 sonra authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
